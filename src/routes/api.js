@@ -1,21 +1,12 @@
-const express = require('express');
+const express = require("express");
+const userController = require("../controllers/userController");
 
 const routerAPI = express.Router();
 
-// const { getUsersAPI, postCreateUserAPI,
-//     putUpdateUserAPI, deleteUserAPI
-
-// } = require('../controllers/apiController')
-
-
-// routerAPI.get('/users', getUsersAPI);
-// routerAPI.post('/users', postCreateUserAPI);
-// routerAPI.put('/users', putUpdateUserAPI);
-// routerAPI.delete('/users', deleteUserAPI);
-
 routerAPI.get("/", (req, res) => {
-    return res.status(200).json( {message: "Welcome to API"})
-})
+  return res.status(200).json({ message: "Welcome to API" });
+});
 
+routerAPI.post("/register", userController.createNewUser);
 
 module.exports = routerAPI; //export default
