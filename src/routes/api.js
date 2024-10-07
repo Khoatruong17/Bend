@@ -8,5 +8,6 @@ routerAPI.get("/", (req, res) => {
 });
 
 routerAPI.post("/register", userController.createNewUser);
+routerAPI.post("/login", userController.loginUser);
 
 module.exports = routerAPI; //export default
