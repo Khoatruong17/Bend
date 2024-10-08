@@ -1,6 +1,8 @@
 const UserS = require("../services/customerService");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const createNewUser = async (req, res) => {
   try {
@@ -27,14 +29,15 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ error: "Missing required fields email, password" });
+      return res.status(200).json({
+        EC: 1,
+        EM: "Email or Password is incorrect!",
+      });
     }
 
-    const user = await User.find({ email: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(404).json({
+      return res.status(200).json({
         EC: 1,
         EM: "Email or Password is incorrect!",
       });
@@ -42,21 +45,32 @@ const loginUser = async (req, res) => {
 
     const isMatchPass = await bcrypt.compare(password, user.password);
     if (!isMatchPass) {
-      return res.status(404).json({
+      return res.status(200).json({
         EC: 1,
         EM: "Email or Password is incorrect!",
       });
     }
 
+    const payload = {
+      email: user.email,
+      name: user.name,
+    };
+
+    const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
     return res.status(200).json({
-      message: "User logged in successfully",
-      data,
+      EC: 0,
+      EM: "User logged in successfully",
+      access_token,
+      userId: user._id,
     });
   } catch (error) {
     console.log(">> Error from loginUser (Controller): ", error);
-    return res
-      .status(500)
-      .json({ error: ">> Error from loginUser (Controller): ", error });
+    return res.status(500).json({
+      EC: 1, // Error code indicating failure
+      EM: "An unexpected error occurred. Please try again later.",
+    });
   }
 };
 
