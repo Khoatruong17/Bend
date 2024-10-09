@@ -1,5 +1,7 @@
 const express = require("express");
-const userController = require("../controllers/userController");
+const authController = require("../controllers/authController");
+const propertiesController = require("../controllers/propertiesController");
+const roomsController = require("../controllers/roomController");
 
 const routerAPI = express.Router();
 
@@ -7,7 +9,18 @@ routerAPI.get("/", (req, res) => {
   return res.status(200).json({ message: "Welcome to API" });
 });
 
-routerAPI.post("/register", userController.createNewUser);
-routerAPI.post("/login", userController.loginUser);
+routerAPI.post("/register", authController.createNewUser);
+routerAPI.post("/login", authController.loginUser);
+
+routerAPI.get("/getAllProperties", propertiesController.getAllProperties);
+routerAPI.post("/addProperties", propertiesController.createProperty);
+routerAPI.put("/updateProperties/:id", propertiesController.updateProperty);
+routerAPI.delete("/deleteProperties/:id", propertiesController.deleteProperty);
+
+// Room Api
+routerAPI.get("/getAllRoom", roomsController.getAllRooms);
+routerAPI.post("/addRoom", roomsController.createRoom);
+routerAPI.put("/updateRoom/:id", roomsController.updateRoom);
+routerAPI.delete("/deleteRoom/:id", roomsController.deleteRoom);
 
 module.exports = routerAPI; //export default
