@@ -73,7 +73,8 @@ const loginUser = async (req, res) => {
       EC: 0,
       EM: "User logged in successfully",
       access_token,
-      userId: user._id,
+      name: user.name,
+      email: user.email,
     });
   } catch (error) {
     console.log(">> Error from loginUser (Controller): ", error);

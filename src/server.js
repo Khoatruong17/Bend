@@ -1,10 +1,10 @@
 require("dotenv").config();
 const express = require("express"); //commonjs
-const configViewEngine = require("./config/viewEngine");
+const configViewEngine = require("./configs/viewEngine");
 const cors = require("cors");
 
 // import connection to database
-const connection = require("./config/database");
+const connection = require("./configs/database");
 // import api file
 const apiRoutes = require("./routes/api");
 // import controller
