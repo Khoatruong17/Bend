@@ -2,6 +2,7 @@ const express = require("express");
 const authController = require("../controllers/authController");
 const propertiesController = require("../controllers/propertiesController");
 const roomsController = require("../controllers/roomController");
+const userController = require("../controllers/userController");
 
 const routerAPI = express.Router();
 
@@ -11,6 +12,11 @@ routerAPI.get("/", (req, res) => {
 
 routerAPI.post("/register", authController.createNewUser);
 routerAPI.post("/login", authController.loginUser);
+
+//Users api
+
+routerAPI.get("/getAllUsers", userController.getAllUsers);
+//routerAPI.delete("/deleteUser/:id", authController.deleteUser);
 
 routerAPI.get("/getAllProperties", propertiesController.getAllProperties);
 routerAPI.post("/addProperties", propertiesController.createProperty);

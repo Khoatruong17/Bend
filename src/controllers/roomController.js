@@ -20,7 +20,7 @@ const createRoom = async (req, res) => {
     });
 
     await newRoom.save();
-    res.status(201).json(newRoom);
+    res.status(200).json(newRoom);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -12,6 +12,16 @@ const createNewUser = async (req, res) => {
         .status(400)
         .json({ error: "Missing required fields name, email, password" });
     }
+
+    //check user exits
+    const existingUser = await User.findOne({ email: email });
+    if (existingUser) {
+      return res.status(200).json({
+        EC: 1,
+        EM: "Email already exists",
+      });
+    }
+
     const data = await UserS.createUserService(name, email, password);
     return res.status(200).json({
       message: "User created successfully",
