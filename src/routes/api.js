@@ -16,6 +16,8 @@ routerAPI.post("/login", authController.loginUser);
 
 // Delay middleware
 routerAPI.all("*", checkToken.checkToken);
+
+routerAPI.get("/account", authController.getAccount);
 //Users api
 
 routerAPI.get("/getAllUsers", userController.getAllUsers);
