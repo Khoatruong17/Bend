@@ -1,14 +1,16 @@
 require("dotenv").config();
 const express = require("express"); //commonjs
-const configViewEngine = require("./configs/viewEngine");
+const configViewEngine = require("../../../../../Idea Project/Code/Bend/src/configs/viewEngine");
 const cors = require("cors");
 
 // import connection to database
-const connection = require("./configs/database");
+const connection = require("../../../../../Idea Project/Code/Bend/src/configs/database");
 // import api file
-const apiRoutes = require("./routes/api");
+const apiRoutes = require("../../../../../Idea Project/Code/Bend/src/routes/api");
 // import controller
-const { getHomepage } = require("./controllers/homeController");
+const {
+  getHomepage,
+} = require("../../../../../Idea Project/Code/Bend/src/controllers/homeController");
 
 const app = express();
 const port = process.env.PORT || 8888;
