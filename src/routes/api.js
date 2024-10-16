@@ -21,6 +21,7 @@ routerAPI.get("/account", authController.getAccount);
 //Users api
 
 routerAPI.get("/getAllUsers", userController.getAllUsers);
+routerAPI.get("/users/:userId", userController.getUsers);
 //routerAPI.delete("/deleteUser/:id", authController.deleteUser);
 
 routerAPI.get("/getAllProperties", propertiesController.getAllProperties);

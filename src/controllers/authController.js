@@ -64,6 +64,7 @@ const loginUser = async (req, res) => {
     const payload = {
       email: user.email,
       name: user.name,
+      role: user.role,
     };
 
     const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -73,6 +74,8 @@ const loginUser = async (req, res) => {
       EC: 0,
       EM: "User logged in successfully",
       access_token,
+      userId: user._id,
+      role: user.role,
       name: user.name,
       email: user.email,
     });
@@ -85,13 +88,12 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getAccount = async (req, res) =>{
-    return res.status(200).json(req.user);
-}
-
+const getAccount = async (req, res) => {
+  return res.status(200).json(req.user);
+};
 
 module.exports = {
   createNewUser,
   loginUser,
-  getAccount
+  getAccount,
 };

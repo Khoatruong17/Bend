@@ -12,19 +12,22 @@ const checkToken = (req, res, next) => {
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = {
+          EC: 0,
+          role: decoded.role,
           email: decoded.email,
           name: decoded.name,
         };
         next();
       } catch (error) {
-        return res
-          .status(401)
-          .json({ message: "Please login to continues !!!" });
+        return res.status(401).json({
+          EC: 1,
+          message: "Please login to continues !!!",
+        });
       }
     } else {
       return res
         .status(401)
-        .json({ message: " Please login to continues !!!" });
+        .json({ EC: 1, message: "Please login to continues !!!" });
     }
   }
 };
