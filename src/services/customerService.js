@@ -2,21 +2,19 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const createUserService = async (name, email, password) => {
+const createUserService = async (username, email, password) => {
   try {
     let hashedPassword = await bcrypt.hash(password, saltRounds);
     let result = await User.create({
-      name,
+      username,
       email,
       password: hashedPassword,
-      role: "null",
+      role: "client",
     });
     return result;
   } catch (error) {
     console.log(">> Error from createUserService: ", error);
-    return res
-      .status(500)
-      .json({ error: ">> Error from createUserService: ", error });
+    return error.message;
   }
 };
 

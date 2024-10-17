@@ -7,6 +7,7 @@ const cors = require("cors");
 const connection = require("../src/configs/database");
 // import api file
 const apiRoutes = require("../src/routes/api");
+const apiARouters = require("../src/routes/apiAdmin")
 // import controller
 const { getHomepage } = require("../src/controllers/homeController");
 
@@ -25,6 +26,7 @@ configViewEngine(app);
 
 //khai báo route
 app.use("/v1/api/", apiRoutes);
+app.use("/v1/apiAdmin/", apiARouters);
 app.use("/", getHomepage);
 
 (async () => {

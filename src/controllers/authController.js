@@ -63,7 +63,7 @@ const loginUser = async (req, res) => {
 
     const payload = {
       email: user.email,
-      name: user.name,
+      name: user.username,
       role: user.role,
     };
 
@@ -76,7 +76,7 @@ const loginUser = async (req, res) => {
       access_token,
       userId: user._id,
       role: user.role,
-      name: user.name,
+      name: user.username,
       email: user.email,
     });
   } catch (error) {
