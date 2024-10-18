@@ -62,6 +62,7 @@ const loginUser = async (req, res) => {
     }
 
     const payload = {
+      _id: user._id,
       email: user.email,
       name: user.username,
       role: user.role,

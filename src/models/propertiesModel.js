@@ -7,9 +7,10 @@ const PropertiesSchema = new mongoose.Schema(
     description: { type: String },
     images: { type: [String] },
     amanities: { type: [String] },
-    location: { type: Object, required: true }, // Assuming GeoJSON
+    location: { type: Object },
     availability: { type: Boolean },
     status: { type: String },
+    isCheck: { type: Boolean },
   },
   { timestamps: true }
 );

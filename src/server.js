@@ -7,9 +7,9 @@ const cors = require("cors");
 const connection = require("../src/configs/database");
 // import api file
 const apiRoutes = require("../src/routes/api");
-const apiARouters = require("../src/routes/apiAdmin")
+const apiARouters = require("../src/routes/apiAdmin");
+const apiHRouters = require("../src/routes/apiHost");
 // import controller
-const { getHomepage } = require("../src/controllers/homeController");
 
 const app = express();
 const port = process.env.PORT || 8888;
@@ -27,7 +27,7 @@ configViewEngine(app);
 //khai báo route
 app.use("/v1/api/", apiRoutes);
 app.use("/v1/apiAdmin/", apiARouters);
-app.use("/", getHomepage);
+app.use("/v1/apiHost/", apiHRouters);
 
 (async () => {
   try {

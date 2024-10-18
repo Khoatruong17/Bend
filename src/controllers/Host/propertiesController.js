@@ -1,38 +1,42 @@
-const propertiesModel = require("../models/propertiesModel");
-const userModel = require("../models/userModel");
+const propertiesModel = require("../../models/propertiesModel");
+const userModel = require("../../models/userModel");
 
 const getAllProperties = async (req, res) => {
   try {
-    const { name, description } = req.body;
-    const filter = {};
-
-    if (name) filter.name = name;
-    if (description)
-      filter.description = { $regex: description, $options: "i" };
-
-    const properties = await propertiesModel.find(filter);
+    if (!req.user.user_id) {
+      return res.status(404).json({
+        EC: 1,
+        message: "Host ID is required",
+      });
+    }
+    const properties = await propertiesModel.find({
+      host_id: req.user.user_id,
+    });
     res.status(200).json({
+      EC: 0,
       message: "Properties fetched successfully",
       data: properties,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      EC: 2,
+      message: error.message,
+    });
   }
 };
 
 const createProperty = async (req, res) => {
   try {
-    const {
-      host_id,
-      name,
-      description,
-      amanities,
-      location,
-      availability,
-      status,
-    } = req.body;
+    if (!req.user.user_id) {
+      return res.status(404).json({
+        EC: 1,
+        message: "Host ID is required",
+      });
+    }
+    const { name, description, amanities, location, availability, status } =
+      req.body;
 
-    const user = await userModel.findById(host_id);
+    const user = await userModel.findById(req.user.user_id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -45,11 +49,16 @@ const createProperty = async (req, res) => {
       amanities,
       location,
       availability,
-      status,
+      status: false,
+      isCheck: false,
     });
 
-    await newProperty.save(); // Lưu property vào database
-    res.status(201).json(newProperty); // Trả về property vừa tạo
+    await newProperty.save();
+    res.status(201).json({
+      EC: 0,
+      message: `Property ${newProperty.name} created successfully. Your request is processing`,
+      data: newProperty,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

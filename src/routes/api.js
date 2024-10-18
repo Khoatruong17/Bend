@@ -1,7 +1,5 @@
 const express = require("express");
 const authController = require("../controllers/authController");
-const propertiesController = require("../controllers/propertiesController");
-const roomsController = require("../controllers/roomController");
 const userController = require("../controllers/userController");
 const checkToken = require("../middlewares/checktoken");
 
@@ -23,16 +21,5 @@ routerAPI.get("/account", authController.getAccount);
 routerAPI.get("/getAllUsers", userController.getAllUsers);
 routerAPI.get("/users/:userId", userController.getUsers);
 //routerAPI.delete("/deleteUser/:id", authController.deleteUser);
-
-routerAPI.get("/getAllProperties", propertiesController.getAllProperties);
-routerAPI.post("/addProperties", propertiesController.createProperty);
-routerAPI.put("/updateProperties/:id", propertiesController.updateProperty);
-routerAPI.delete("/deleteProperties/:id", propertiesController.deleteProperty);
-
-// Room Api
-routerAPI.get("/getAllRoom", roomsController.getAllRooms);
-routerAPI.post("/addRoom", roomsController.createRoom);
-routerAPI.put("/updateRoom/:id", roomsController.updateRoom);
-routerAPI.delete("/deleteRoom/:id", roomsController.deleteRoom);
 
 module.exports = routerAPI; //export default

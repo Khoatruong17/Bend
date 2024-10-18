@@ -13,6 +13,7 @@ const checkToken = (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = {
           EC: 0,
+          user_id: decoded.id,
           role: decoded.role,
           email: decoded.email,
           name: decoded.name,
@@ -32,6 +33,17 @@ const checkToken = (req, res, next) => {
   }
 };
 
+const checkRoleHost = (req, res, next) => {
+  if (req.user.role === "host") {
+    next();
+  } else {
+    return res
+      .status(403)
+      .json({ EC: 1, message: "Access denied: Host role required" });
+  }
+};
+
 module.exports = {
   checkToken,
+  checkRoleHost,
 };
