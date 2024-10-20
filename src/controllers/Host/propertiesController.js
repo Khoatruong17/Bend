@@ -4,7 +4,7 @@ const userModel = require("../../models/userModel");
 const getAllProperties = async (req, res) => {
   try {
     if (!req.user.user_id) {
-      return res.status(404).json({
+      return res.status(401).json({
         EC: 1,
         message: "Host ID is required",
       });
