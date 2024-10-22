@@ -33,9 +33,8 @@ const createProperty = async (req, res) => {
         message: "Host ID is required",
       });
     }
-    const { name, description, amanities, location, availability, status } =
+    const { name, description, location, availability, address, images } =
       req.body;
-
     const user = await userModel.findById(req.user.user_id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -45,14 +44,13 @@ const createProperty = async (req, res) => {
       host_id: user._id,
       name,
       description,
-      // images: imagesArray,
-      amanities,
-      location,
+      images,
+      amenities: req.body.amenities,
+      location: address,
       availability,
       status: false,
       isCheck: false,
     });
-
     await newProperty.save();
     res.status(201).json({
       EC: 0,
@@ -69,31 +67,40 @@ const updateProperty = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
+    // Tìm property trước khi sử dụng
     const propertyBeforeUpdate = await propertiesModel.findById(id);
     if (!propertyBeforeUpdate) {
       return res.status(404).json({ message: "Property not found" });
     }
 
-    const updatedProperty = await propertiesModel.findByIdAndUpdate(
-      id,
-      updates,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
+    // Kiểm tra xem có bất kỳ thay đổi nào không
     const hasUpdates = Object.keys(updates).some(
-      (key) => propertyBeforeUpdate[key] !== updatedProperty[key]
+      (key) => propertyBeforeUpdate[key] !== updates[key]
     );
 
     if (!hasUpdates) {
-      return res
-        .status(400)
-        .json({ message: "No updates made to the property" });
+      return res.status(400).json({
+        EC: 1,
+        message: "No updates made to the property",
+      });
     }
 
-    res.status(200).json(updatedProperty);
+    // Cập nhật amenities nếu có
+    if (updates.amenities) {
+      propertyBeforeUpdate.amenities = updates.amenities;
+    }
+
+    // Cập nhật các trường khác
+    Object.keys(updates).forEach((key) => {
+      if (key !== "amenities") {
+        propertyBeforeUpdate[key] = updates[key];
+      }
+    });
+
+    // Lưu đối tượng đã cập nhật
+    const updatedProperty = await propertyBeforeUpdate.save();
+
+    res.status(200).json({ EC: 0, data: updatedProperty });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -102,15 +109,21 @@ const updateProperty = async (req, res) => {
 const deleteProperty = async (req, res) => {
   try {
     const { id } = req.params; // Lấy ID từ params
-
+    if (id === undefined) {
+      return res.status(400).json({ message: "ID is required" });
+    }
     // Xóa property với ID đã cho
     const deletedProperty = await propertiesModel.findByIdAndDelete(id);
 
     if (!deletedProperty) {
-      return res.status(404).json({ message: "Property not found" });
+      return res.status(404).json({
+        EC: 1,
+        message: "Property not found",
+      });
     }
 
     res.status(200).json({
+      EC: 0,
       message: "Property deleted successfully",
       data: deletedProperty, // Trả về property đã xóa  trước khi xóa
     });

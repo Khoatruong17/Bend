@@ -6,7 +6,7 @@ const PropertiesSchema = new mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String },
     images: { type: [String] },
-    amanities: { type: [String] },
+    amenities: { type: [String] },
     location: { type: Object },
     availability: { type: Boolean },
     status: { type: String },
