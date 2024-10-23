@@ -9,7 +9,7 @@ const PropertiesSchema = new mongoose.Schema(
     amenities: { type: [String] },
     location: { type: Object },
     availability: { type: Boolean },
-    status: { type: String },
+    status: { type: Boolean },
     isCheck: { type: Boolean },
   },
   { timestamps: true }
