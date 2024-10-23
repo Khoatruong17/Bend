@@ -7,6 +7,8 @@ const {
   updateProperty,
 } = require("../controllers/Host/propertiesController");
 
+const typeRoom = require("../controllers/Host/typeRoomController");
+
 const routerHostAPI = express.Router();
 
 routerHostAPI.get("/", (req, res) => {
@@ -16,10 +18,14 @@ routerHostAPI.get("/", (req, res) => {
 // Delay middleware
 routerHostAPI.all("*", checkToken, checkRoleHost);
 
-// Manager Host
+// Manager properties
 routerHostAPI.get("/allProperties", getAllProperties);
 routerHostAPI.post("/createProperties", createProperty);
 routerHostAPI.delete("/deleteProperty/:id", deleteProperty);
 routerHostAPI.put("/editProperty/:id", updateProperty);
+
+// Manager Rooms
+routerHostAPI.get("/getAllTypeRoom", typeRoom.getAllTypeRooms);
+routerHostAPI.post("/createTypeRoom", typeRoom.createNewTypeRoom);
 
 module.exports = routerHostAPI;
