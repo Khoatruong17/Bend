@@ -75,6 +75,40 @@ const createNewTypeRoom = async (req, res) => {
   }
 };
 
+const getListP = async (req, res, next) => {
+  try {
+    if (!req.user.user_id) {
+      return res.status(401).json({
+        EC: 1,
+        message: "Host ID is required",
+      });
+    }
+    const properties = await propertiesModel
+      .find({
+        host_id: req.user.user_id,
+      })
+      .select("_id");
+    if (!properties) {
+      return res.status(404).json({
+        EC: 1,
+        message: "No properties found for the current user",
+      });
+    }
+    const propertyIds = properties.map((property) => property._id);
+    return res.status(200).json({
+      EC: 0,
+      message: "Get ids properties successfully",
+      data: propertyIds,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error getting property IDs",
+      error: error.message,
+    });
+  }
+};
+
 const getAllTypeRooms = async (req, res) => {
   try {
     if (!req.user.user_id) {
@@ -194,4 +228,5 @@ module.exports = {
   getTypeRoomById,
   updateTypeRoom,
   deleteTypeRoom,
+  getListP,
 };

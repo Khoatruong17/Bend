@@ -27,5 +27,6 @@ routerHostAPI.put("/editProperty/:id", updateProperty);
 // Manager Rooms
 routerHostAPI.get("/getAllTypeRoom", typeRoom.getAllTypeRooms);
 routerHostAPI.post("/createTypeRoom", typeRoom.createNewTypeRoom);
+routerHostAPI.get("/getListP", typeRoom.getListP);
 
 module.exports = routerHostAPI;
