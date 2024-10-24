@@ -2,7 +2,9 @@ require("dotenv").config();
 const express = require("express"); //commonjs
 const configViewEngine = require("../src/configs/viewEngine");
 const cors = require("cors");
-
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 // import connection to database
 const connection = require("../src/configs/database");
 // import api file
@@ -16,7 +18,9 @@ const port = process.env.PORT || 8888;
 
 // enable cors middleware for cross-origin request
 app.use(cors());
-
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(fileUpload());
 //config req.body
 app.use(express.json()); // for json
 app.use(express.urlencoded({ extended: true })); // for form data

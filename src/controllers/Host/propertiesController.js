@@ -132,6 +132,45 @@ const deleteProperty = async (req, res) => {
   }
 };
 
+const getTypeRoomsByPropertyId = async (req, res) => {
+  try {
+    const { property_id } = req.params;
+
+    // Kiểm tra xem property có tồn tại không
+    const propertyExists = await propertiesModel.findById(property_id);
+    if (!propertyExists) {
+      return res.status(404).json({
+        EC: 1,
+        message: "Property not found",
+      });
+    }
+
+    // Tìm tất cả các TypeRooms dựa trên property_id
+    const typeRooms = await typeRoomModel.find({
+      property_id: property_id,
+    });
+
+    if (typeRooms.length === 0) {
+      return res.status(404).json({
+        EC: 1,
+        message: "No TypeRooms found for this property",
+      });
+    }
+
+    res.status(200).json({
+      EC: 0,
+      message: "TypeRooms fetched successfully",
+      data: typeRooms,
+    });
+  } catch (error) {
+    console.error("Error fetching TypeRooms by property_id:", error);
+    res.status(500).json({
+      EC: 1,
+      message: "Error fetching TypeRooms",
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   getAllProperties,
   createProperty,

@@ -2,8 +2,17 @@ const express = require("express");
 const authController = require("../controllers/authController");
 const userController = require("../controllers/userController");
 const checkToken = require("../middlewares/checktoken");
+const {
+  postUploadMultipleFiles,
+  uploadImage,
+} = require("../controllers/fileController");
 
+const multer = require("multer");
 const routerAPI = express.Router();
+
+routerAPI.post("/upload", postUploadMultipleFiles);
+routerAPI.post("/image", uploadImage);
+//routerAPI.get("/files/:id", downloadController);
 
 routerAPI.get("/", (req, res) => {
   return res.status(200).json({ message: "Welcome to API" });

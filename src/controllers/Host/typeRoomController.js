@@ -77,33 +77,39 @@ const createNewTypeRoom = async (req, res) => {
 
 const getListP = async (req, res, next) => {
   try {
+    // Kiểm tra xem user_id có tồn tại không
     if (!req.user.user_id) {
       return res.status(401).json({
         EC: 1,
         message: "Host ID is required",
       });
     }
+
+    // Tìm tất cả các properties dựa trên host_id
     const properties = await propertiesModel
       .find({
         host_id: req.user.user_id,
       })
-      .select("_id");
-    if (!properties) {
+      .select("_id name"); // Lấy cả _id và name
+
+    // Kiểm tra xem có properties nào không
+    if (!properties || properties.length === 0) {
       return res.status(404).json({
         EC: 1,
         message: "No properties found for the current user",
       });
     }
-    const propertyIds = properties.map((property) => property._id);
+
+    // Trả về danh sách các properties với _id và name
     return res.status(200).json({
       EC: 0,
-      message: "Get ids properties successfully",
-      data: propertyIds,
+      message: "Get properties successfully",
+      data: properties, // Trả về danh sách properties với _id và name
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Error getting property IDs",
+      message: "Error getting properties",
       error: error.message,
     });
   }
@@ -149,17 +155,11 @@ const getAllTypeRooms = async (req, res) => {
 const getTypeRoomById = async (req, res) => {
   try {
     const { id } = req.params;
-    const typeRoom = await typeRoomModel.findById(id).populate("property_id");
-
-    if (!typeRoom) {
-      return res.status(404).json({
-        message: "TypeRoom not found",
-      });
-    }
-
+    const typeRooms = await typeRoomModel.find({ property_id: id });
     res.status(200).json({
-      message: "Fetched TypeRoom successfully",
-      data: typeRoom,
+      EC: 0,
+      message: "TypeRooms fetched successfully",
+      data: typeRooms,
     });
   } catch (error) {
     res.status(500).json({
